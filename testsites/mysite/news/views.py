@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from .models import News
 
 
 # Create your views here.
@@ -9,8 +10,6 @@ from django.http import HttpResponse
 
 def index(requests):
     # print(requests)
-    return HttpResponse('Hello World')
+    news = News.objects.order_by('-created_at')
+    return render(requests, 'news/index.html', {'news': news, 'title': 'Список новостей'})
 
-def test(requests):
-    # print(requests)
-    return HttpResponse('<h1>Тестовая страница</h1>')
