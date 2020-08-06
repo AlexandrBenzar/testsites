@@ -10,6 +10,6 @@ from .models import News
 
 def index(requests):
     # print(requests)
-    news = News.objects.order_by('-created_at')
+    news = News.objects.all()
     return render(requests, 'news/index.html', {'news': news, 'title': 'Список новостей'})
 
