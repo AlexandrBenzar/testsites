@@ -11,21 +11,15 @@ from .models import News, Category
 def index(requests):
     # print(requests)
     news = News.objects.all()
-    categories = Category.objects.all()
     context = {
         'news': news,
-        'title': 'Список новостей',
-        'categories': categories, }
-
+        'title': 'Список новостей', }
     return render(requests, 'news/index.html', context=context)
 
 
 def get_category(requests, category_id):
     news = News.objects.filter(category_id=category_id)
-    categories = Category.objects.all()
     category = Category.objects.get(pk=category_id)
     context = {'news': news,
-               'categories': categories,
                'category': category, }
-
     return render(requests, 'news/category.html', context=context)
