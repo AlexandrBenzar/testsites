@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 
 from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator
 
 from .models import News, Category
 
@@ -14,6 +15,14 @@ from .utils import MyMixin
 # Views-контроллер вызывается в ответ на клиентский запрос. Обрабатывет запрос, формирует данные запрашивая их у модели
 # и возвращает ответ в виде представления заполненного данными. КОнтроллер связуещее звено
 # между данными и их отображениями
+
+def test(request):
+    objects = ['john1', 'paul2', 'george3', 'ringo4', 'john5', 'paul6', 'george7']
+    paginator = Paginator(objects, 2)
+    page_number = request.GET.get('page', 1)
+    page_objects = paginator.get_page(page_number)
+    return render(request, 'news/test.html', {'page_obj': page_objects})
+
 
 class HomeNews(MyMixin, ListView):
     model = News
