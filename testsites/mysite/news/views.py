@@ -2,11 +2,12 @@ from django.shortcuts import render, get_object_or_404, redirect
 
 from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.paginator import Paginator
+
+from django.contrib import messages
 
 from .models import News, Category
 
-from .forms import NewsForm
+from .forms import NewsForm, UserRegisterForm
 
 from .utils import MyMixin
 
@@ -15,6 +16,24 @@ from .utils import MyMixin
 # Views-контроллер вызывается в ответ на клиентский запрос. Обрабатывет запрос, формирует данные запрашивая их у модели
 # и возвращает ответ в виде представления заполненного данными. КОнтроллер связуещее звено
 # между данными и их отображениями
+
+def register(requests):
+    if requests.method == 'POST':
+        form = UserRegisterForm(requests.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(requests, 'Вы успешно зарегистрировались')
+            return redirect('login')
+        else:
+            messages.error(requests, 'Ошибка регистрации')
+    else:
+        form = UserRegisterForm()
+    return render(requests, 'news/register.html', {'form': form})
+
+
+def login(requests):
+    return render(requests, 'news/login.html')
+
 
 class HomeNews(MyMixin, ListView):
     model = News
