@@ -50,7 +50,7 @@ def user_logout(requests):
     return redirect('login')
 
 
-def test_email(requests):
+def contact(requests):
     if requests.method == 'POST':
         form = ContactForm(requests.POST)
         if form.is_valid():
@@ -58,11 +58,11 @@ def test_email(requests):
                              ['albenzar@bk.ru'], fail_silently=True)
             if mail:
                 messages.success(requests, 'Письмо отправлено!')
-                return redirect('test_email')
+                return redirect('contact')
             else:
                 messages.error(requests, 'Ошибка отправки')
         else:
-            messages.error(requests, 'Ошибка регистрации')
+            messages.error(requests, 'Ошибка валидации')
     else:
         form = ContactForm()
     return render(requests, 'news/test_email.html', {'form': form})
