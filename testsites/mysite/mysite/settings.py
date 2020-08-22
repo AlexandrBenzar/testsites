@@ -124,3 +124,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 INTERNAL_IPS = ['127.0.0.1']
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = ''  # Прописать логин и
+EMAIL_HOST_PASSWORD = ''  # пароль для входа в почту с которой будет отправляться письмо
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True

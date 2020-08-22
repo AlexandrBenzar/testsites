@@ -4,10 +4,11 @@ from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import login, logout
 from django.contrib import messages
+from django.core.mail import send_mail
 
 from .models import News, Category
 
-from .forms import NewsForm, UserRegisterForm, UserLoginForm
+from .forms import NewsForm, UserRegisterForm, UserLoginForm, ContactForm
 
 from .utils import MyMixin
 
@@ -43,9 +44,29 @@ def user_login(requests):
         form = UserLoginForm()
     return render(requests, 'news/login.html', {'form': form})
 
+
 def user_logout(requests):
     logout(requests)
     return redirect('login')
+
+
+def test_email(requests):
+    if requests.method == 'POST':
+        form = ContactForm(requests.POST)
+        if form.is_valid():
+            mail = send_mail(form.cleaned_data['subject'], form.cleaned_data['content'], 'casha199410@gmail.com',
+                             ['albenzar@bk.ru'], fail_silently=True)
+            if mail:
+                messages.success(requests, 'Письмо отправлено!')
+                return redirect('test_email')
+            else:
+                messages.error(requests, 'Ошибка отправки')
+        else:
+            messages.error(requests, 'Ошибка регистрации')
+    else:
+        form = ContactForm()
+    return render(requests, 'news/test_email.html', {'form': form})
+
 
 class HomeNews(MyMixin, ListView):
     model = News
