@@ -68,7 +68,7 @@ def contact(requests):
     return render(requests, 'news/test_email.html', {'form': form})
 
 
-class HomeNews(MyMixin, ListView):
+class HomeNewsView(MyMixin, ListView):
     model = News
     template_name = 'news/home_news_list.html'
     context_object_name = 'news'
@@ -85,30 +85,31 @@ class HomeNews(MyMixin, ListView):
         return News.objects.filter(is_published=True).select_related('category')
 
 
-class NewsByCategory(MyMixin, ListView):
+class NewsByCategoryView(MyMixin, ListView):
     model = News
     template_name = 'news/home_news_list.html'
     context_object_name = 'news'
     allow_empty = False
     paginate_by = 2
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = self.get_upper(Category.objects.get(pk=self.kwargs['category_id']))
+        category_title = Category.objects.get(pk=self.kwargs['category_id'])
+        context['title'] = self.get_upper(category_title)
         return context
 
     def get_queryset(self):
         return News.objects.filter(category_id=self.kwargs['category_id'], is_published=True).select_related('category')
 
 
-class ViewNews(DetailView):
+class NewsView(DetailView):
     model = News
     # template_name = 'news/news_detail.html'
     # pk_url_kwarg = 'news_id'
     context_object_name = 'news_item'
 
 
-class CreateNews(LoginRequiredMixin, CreateView):
+class CreateNewsView(LoginRequiredMixin, CreateView):
     form_class = NewsForm
     template_name = 'news/add_news.html'
     raise_exception = True

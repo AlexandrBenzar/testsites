@@ -3,12 +3,12 @@ from django.urls import reverse
 
 
 class News(models.Model):
-    title = models.CharField(max_length=150, verbose_name='Наименование')
-    content = models.TextField(blank=True, verbose_name='Контент')
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата публикации')
-    updated_at = models.DateTimeField(auto_now=True, verbose_name='Обновлено')
-    photo = models.ImageField(upload_to='photos/%Y/%m/%d/', verbose_name='Фото', blank=True)
-    is_published = models.BooleanField(default=True, verbose_name='Опубликовано')
+    title = models.CharField(verbose_name='Наименование', max_length=150)
+    content = models.TextField(verbose_name='Контент', blank=True)
+    created_at = models.DateTimeField(verbose_name='Дата публикации', auto_now_add=True)
+    updated_at = models.DateTimeField(verbose_name='Обновлено', auto_now=True)
+    photo = models.ImageField(verbose_name='Фото', upload_to='photos/%Y/%m/%d/', blank=True)
+    is_published = models.BooleanField(verbose_name='Опубликовано', default=True)
     category = models.ForeignKey('Category', on_delete=models.PROTECT, verbose_name='Категория')
     views_count = models.IntegerField(default=0)
 
@@ -25,7 +25,7 @@ class News(models.Model):
 
 
 class Category(models.Model):
-    title = models.CharField(max_length=150, db_index=True, verbose_name='Наименование категории')
+    title = models.CharField(verbose_name='Наименование категории', max_length=150, db_index=True)
 
     def get_absolute_url(self):
         return reverse('category', kwargs={'category_id': self.pk})
